@@ -53,6 +53,39 @@ npm run build
 
 The built files will be in the `dist` directory.
 
+## Deployment
+
+### Vercel Deployment
+
+1. **Push to GitHub**: 
+   - Make sure your code is pushed to the `stagging` branch
+   - Vercel will automatically deploy from this branch
+
+2. **Environment Variables**:
+   - Go to your Vercel project settings
+   - Add these environment variables:
+     - `SUPABASE_URL`: Your Supabase project URL
+     - `SUPABASE_ANON_KEY`: Your Supabase anonymous key
+
+3. **Build Settings**:
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install --legacy-peer-deps`
+
+### Manual Deployment
+
+If you encounter dependency issues during deployment:
+
+```bash
+# Use legacy peer deps for compatibility
+npm install --legacy-peer-deps
+npm run build
+```
+
+### Troubleshooting
+
+**ERESOLVE Error**: If you get dependency resolution errors, the project is configured to use `--legacy-peer-deps` for compatibility between Vite and PWA plugin versions.
+
 ## PWA Features
 
 This application includes PWA capabilities:
