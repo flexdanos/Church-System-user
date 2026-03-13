@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:prod": "npm install --legacy-peer-deps && npm run build",
+    "build:prod": "yarn install && yarn build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
