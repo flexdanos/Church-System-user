@@ -15,7 +15,7 @@ A Progressive Web Application built with React, TypeScript, Tailwind CSS, and Su
 ### Prerequisites
 
 - Node.js (version 18 or higher)
-- npm or yarn
+- Yarn package manager
 - Supabase account and project
 
 ### Installation
@@ -23,7 +23,7 @@ A Progressive Web Application built with React, TypeScript, Tailwind CSS, and Su
 1. Clone this repository or navigate to the project directory
 2. Install dependencies:
    ```bash
-   npm install
+   yarn install
    ```
 
 ### Supabase Setup
@@ -40,7 +40,7 @@ A Progressive Web Application built with React, TypeScript, Tailwind CSS, and Su
 ### Running the App
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 The app will be available at `http://localhost:5173`
@@ -48,7 +48,7 @@ The app will be available at `http://localhost:5173`
 ## Building for Production
 
 ```bash
-npm run build
+yarn build
 ```
 
 The built files will be in the `dist` directory.
@@ -68,23 +68,27 @@ The built files will be in the `dist` directory.
      - `SUPABASE_ANON_KEY`: Your Supabase anonymous key
 
 3. **Build Settings**:
-   - Build Command: `npm run build`
+   - Build Command: `yarn build`
    - Output Directory: `dist`
-   - Install Command: `npm install --legacy-peer-deps`
+   - Install Command: `yarn install`
 
 ### Manual Deployment
 
 If you encounter dependency issues during deployment:
 
 ```bash
-# Use legacy peer deps for compatibility
-npm install --legacy-peer-deps
-npm run build
+# Install dependencies with yarn
+yarn install
+yarn build
 ```
 
 ### Troubleshooting
 
-**ERESOLVE Error**: If you get dependency resolution errors, the project is configured to use `--legacy-peer-deps` for compatibility between Vite and PWA plugin versions.
+**Dependency Issues**: Yarn generally handles dependency resolution better than npm. If you encounter issues, try:
+```bash
+yarn install --ignore-engines
+yarn build
+```
 
 ## PWA Features
 
