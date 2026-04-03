@@ -52,7 +52,6 @@ const FormInput: React.FC<{
 export const Profile: React.FC = () => {
   const { user, isProfileComplete, checkProfileCompletion } = useAuth()
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [validationErrors, setValidationErrors] = useState<string[]>([])
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -73,7 +72,6 @@ export const Profile: React.FC = () => {
     const loadMemberData = async () => {
       if (!user?.email) return
       
-      setIsLoading(true)
       try {
         const { data, error } = await supabase
           .from('members')
@@ -83,14 +81,13 @@ export const Profile: React.FC = () => {
 
         if (error) {
           console.error('Error loading member data:', error)
-          // If no member record exists, we'll use default values
           return
         }
 
         if (data) {
           setFormData({
             full_name: data.full_name || '',
-            email: data.email || user.email || '',
+            email: data.email || user?.email || '',
             phone_number: data.phone_number || '',
             date_of_birth: data.date_of_birth || '',
             address: data.address || '',
@@ -102,8 +99,6 @@ export const Profile: React.FC = () => {
         }
       } catch (error) {
         console.error('Error loading member data:', error)
-      } finally {
-        setIsLoading(false)
       }
     }
 
