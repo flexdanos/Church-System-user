@@ -1,10 +1,49 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+
+interface MemberProfile {
+  profile_picture?: {
+    base64: string
+    name: string
+  }
+}
 
 export const Header: React.FC = () => {
   const { user, signOut } = useAuth()
+  const navigate = useNavigate()
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  // Load user profile picture only once
+  useEffect(() => {
+    const loadProfilePicture = async () => {
+      if (!user?.email || profilePicture) return // Don't refetch if already loaded
+      
+      try {
+        const { data, error } = await supabase
+          .from('members')
+          .select('profile_picture')
+          .eq('email', user.email)
+          .single()
+
+        if (error) {
+          console.error('Error loading profile picture:', error)
+          return
+        }
+
+        if (data?.profile_picture?.base64) {
+          setProfilePicture(data.profile_picture.base64)
+        }
+      } catch (error) {
+        console.error('Error loading profile picture:', error)
+      }
+    }
+
+    loadProfilePicture()
+  }, [user?.email]) // Only depend on user email, not profilePicture
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -21,6 +60,11 @@ export const Header: React.FC = () => {
 
   const handleSignOut = () => {
     signOut()
+    setIsProfileMenuOpen(false)
+  }
+
+  const handleProfileClick = () => {
+    navigate('/profile')
     setIsProfileMenuOpen(false)
   }
 
@@ -45,13 +89,20 @@ export const Header: React.FC = () => {
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-medium text-gray-900">
                   {user?.email?.split('@')[0]}
-                </p>
-                <p className="text-xs text-gray-500">Admin</p>
+                </p>              
               </div>
-              <div className="w-10 h-10 bg-burgundy-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-burgundy-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+              <div className="w-10 h-10 bg-burgundy-100 rounded-full overflow-hidden flex items-center justify-center">
+                {profilePicture ? (
+                  <img 
+                    src={profilePicture} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <svg className="w-6 h-6 text-burgundy-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                )}
               </div>
               <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -61,8 +112,12 @@ export const Header: React.FC = () => {
             {isProfileMenuOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                 <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900">{user?.email}</p>
-                  <p className="text-xs text-gray-500">Administrator</p>
+                  <button
+                    onClick={handleProfileClick}
+                    className="text-sm font-medium text-gray-900 hover:text-burgundy-600 transition-colors cursor-pointer break-words max-w-[180px] sm:max-w-none"
+                  >
+                    {user?.email}
+                  </button>
                 </div>
                 <button
                   onClick={handleSignOut}
