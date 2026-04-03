@@ -3,13 +3,6 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-interface MemberProfile {
-  profile_picture?: {
-    base64: string
-    name: string
-  }
-}
-
 export const Header: React.FC = () => {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
