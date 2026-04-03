@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { BottomNavigation } from './BottomNavigation'
-import { Header } from './Header'
 import { Link } from 'react-router-dom'
 // import { BackgroundImage } from './BackgroundImage'
 
@@ -10,8 +9,6 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-burgundy-50 via-white to-burgundy-100 pb-16 md:pb-0">
-      <Header />
-      
       <div className="relative z-10 pt-16">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
           <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl border border-white/20">
