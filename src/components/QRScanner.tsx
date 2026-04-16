@@ -64,7 +64,7 @@ export const QRScanner: React.FC<QRScannerProps> = ({ isOpen, onClose, onScan, u
       }
 
       // Create attendance record
-      const { data: attendanceData, error: attendanceError } = await supabase
+      const { error: attendanceError } = await supabase
         .from('attendance')
         .insert({
           event_id: eventId,
